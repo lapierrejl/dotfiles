@@ -1,0 +1,7 @@
+[user]
+	email = jeremiah.lapierre@warnermedia.com
+	name = Jeremiah LaPierre
+[pull]
+	rebase = true
+[core]
+	pager = delta
