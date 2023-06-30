@@ -1,6 +1,7 @@
 if vim.g.vscode then
   -- VSCode extension
   require("user.core.options")
+  require("user.core.keymaps")
 else
   -- ordinary Neovim
   require("user.plugins-setup")
@@ -20,4 +21,5 @@ else
   require("user.plugins.gitsigns")
   require("user.plugins.bufferline")
   require("user.plugins.copilot")
+  require("user.plugins.go")
 end

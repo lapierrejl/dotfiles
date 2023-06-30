@@ -33,7 +33,7 @@ keymap.set("n", "<C-w><C-k>", ":vertical resize -2<cr>")
 -- Buffers
 keymap.set("n", "<S-h>", ":BufferLineCyclePrev<cr>")
 keymap.set("n", "<S-l>", ":BufferLineCycleNext<cr>")
-keymap.set("n", "<C-w><C-d>", ":bp|bd #<cr>")
+keymap.set("n", "<leader>db", ":bp|bd #<cr>")
 --Tabs
 keymap.set("n", "<leader>to", ":tabnew<CR>") -- open new tab
 keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab

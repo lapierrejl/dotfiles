@@ -88,6 +88,8 @@ return packer.startup(function(use)
       require("inc_rename").setup()
     end,
   })
+  use("ray-x/go.nvim") -- go language server
+  use("ray-x/guihua.lua") -- gui for go.nvim
 
   -- formatting & linting
   use("jose-elias-alvarez/null-ls.nvim") -- configure formatters & linters
