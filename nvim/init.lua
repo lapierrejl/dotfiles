@@ -1,25 +1,19 @@
+-- If this is vscode don't load these
 if vim.g.vscode then
-  -- VSCode extension
-  require("user.core.options")
-  require("user.core.keymaps")
+  return
 else
-  -- ordinary Neovim
-  require("user.plugins-setup")
-  require("user.core.options")
-  require("user.core.keymaps")
-  require("user.core.colorscheme")
-  require("user.plugins.comment")
-  require("user.plugins.nvim-tree")
-  require("user.plugins.lualine")
-  require("user.plugins.telescope")
-  require("user.plugins.nvim-cmp")
-  require("user.plugins.lsp.mason")
-  require("user.plugins.lsp.lspconfig")
-  require("user.plugins.lsp.null-ls")
-  require("user.plugins.autopairs")
-  require("user.plugins.treesitter")
-  require("user.plugins.gitsigns")
-  require("user.plugins.bufferline")
-  require("user.plugins.copilot")
-  require("user.plugins.go")
+require('keymaps')
+require('plugins.lazy')
+require('plugins.misc')
+require('plugins.lualine')
+require('options')
+require('misc')
+require('plugins.dap')
+require('plugins.gitsigns')
+require('plugins.tele')
+require('plugins.treesitter')
+require('plugins.lsp')
+require('plugins.trouble')
+require('plugins.zenmode')
 end
+-- vim: ts=8 sts=2 sw=2 et

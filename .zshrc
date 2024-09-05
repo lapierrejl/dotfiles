@@ -4,7 +4,7 @@ export EDITOR=nvim
 export VISUAL="$EDITOR"
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
+export XDG_CONFIG_HOME="$HOME/.config"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -71,7 +71,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(vi-mode git asdf docker docker-compose helm fzf terraform)
+plugins=(vi-mode git docker docker-compose helm fzf terraform)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -102,6 +102,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias k="kubectl"
 alias al="docker run --rm -it -v ~/.aws:/root/.aws aws-azure-login"
+alias ls="eza"
 
 # Created by `pipx` on 2023-01-26 21:04:52
 export PATH="$PATH:/Users/jlapierre/.local/bin"
@@ -111,12 +112,14 @@ bindkey '^R' fzf-history-widget
 
 source <(kubectl completion zsh)
 
-complete -C '/Users/jeremiah.lapierre/.asdf/shims/aws_completer' aws
+export GPG_TTY=$(tty)
 
 switch-k8s-context() {
-  kubectl config get-contexts --no-headers \
-  | fzf | awk '{print $1}' \
-  | xargs -o -I % kubectl config use-context %
+  local cluster=$(kubectl config get-contexts --no-headers | fzf | awk '{print $1}')
+  if [ "$cluster" != "*" ]; then
+    kubectl config use-context $cluster
+  fi
+  kubectl config current-context
 }
 
 set-aws-profile() {
@@ -134,6 +137,16 @@ ssm_session () {
   node_id=$4
   
 		aws ssm start-session --region $region --target $node_id --profile $profile
+}
+
+ssm_ssh () {
+  local certificate=$1
+  local profile=$2
+  local region=$3
+  local node_id=$4
+  
+    proxy_command="aws ec2-instance-connect send-ssh-public-key --instance-id $node_id --instance-os-user ec2-user --ssh-public-key file://${certificate}.pub --availability-zone '$(aws ec2 describe-instances --instance-ids $node_id --query 'Reservations[0].Instances[0].Placement.AvailabilityZone' --output text --profile $profile)' --profile $profile && aws ssm start-session --target $node_id --document-name AWS-StartSSHSession --parameters 'portNumber=22' --profile $profile"
+    ssh -o ProxyCommand="$proxy_command" ec2-user@$node_id -i $certificate -vvv
 }
 
 sm_eks_node () {
@@ -157,8 +170,37 @@ sm_eks_node () {
   ssm_session $node_name $aws_profile $region $node_id
 }
 
-export SDKROOT="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-
 # Created by `pipx` on 2023-03-17 21:57:26
-export PATH="${PATH}:/Users/jeremiah.lapierre/.local/bin:${HOME}/.krew/bin"
+export PATH="${PATH}:/Users/jlapierre/.local/bin:${HOME}/.krew/bin"
+#eval "$(/Users/jlapierre/.local/bin/mise activate zsh)"
+## login to all aws accounts with notifications
+function alw() {
+    local code line profiles
+
+    # Frustratingly I can't find a command to list these profiles.
+    profiles=("${(f)$(grep sso_start_url ~/.aws/config | sort -u | cut -d ' ' -f 3)}")
+
+    for profile in "${profiles[@]}"; do
+        # Log in in the background.
+        coproc aws-sso-util login "${profile}" 2>&1
+
+        # This is a bit brittle; relies on output format not changing.
+        while read -pE line; do
+            if [[ "${line} " =~ "Then enter the code:" ]]; then
+                read -pe
+                read -pE code
+                break
+            fi
+        done
+
+        # Pop up a notification with the code for comparision so we don't have
+        # to switch back to a terminal.
+        osascript -e "display notification \"Code for ${profile}: ${code}\" with title \"aws-sso-util login\""
+
+        # Read out remaining lines.
+        while read -pe; do; done
+    done
+}
+eval "$($HOME/.local/bin/mise activate zsh)"
+complete -C aws_completer aws
 

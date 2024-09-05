@@ -1,7 +1,11 @@
+# This is Git's per-user configuration file.
 [user]
 	email = jeremiah.lapierre@warnermedia.com
 	name = Jeremiah LaPierre
+# Please adapt and uncomment the following lines:
+#	name = Jeremiah LaPierre
+#	email = jeremiah.lapierre@warnermedia.com@
 [pull]
 	rebase = true
-[core]
-	pager = delta
+[url "ssh://git@github.com/wbd-streaming/boundary-tools"]
+	insteadOf = https://github.com/wbd-streaming/boundary-tools
