@@ -57,7 +57,7 @@ require('mason').setup()
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'gopls', 'terraformls', 'dockerls', 'lua_ls', 'bashls' }
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'gopls', 'terraformls', 'dockerls', 'lua_ls', 'bashls', 'helm_ls', 'yamlls' }
 
 -- Ensure the servers above are installed
 require('mason-lspconfig').setup {
@@ -119,3 +119,34 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+require('lspconfig').yamlls.setup {
+  settings = {
+    yaml = {
+      schemas = {
+        ["https://json.schemastore.org/github-workflow.json"] = "/.github/workflows/*",
+        -- Add other schemas as needed
+      },
+      validate = true,
+      format = {
+        enable = true,
+      },
+      customTags = {
+        "!include_dir_merge_list",
+        "!include_dir_merge_named",
+        "!secret"
+        -- Add other custom tags as needed
+      },
+    },
+  },
+  on_attach = function(client, bufnr)
+    -- Disable yaml-ls for Helm template files
+    local file_name = vim.fn.expand('%:p')
+    if string.match(file_name, "templates/.*%.yaml$") or 
+       string.match(file_name, "templates/.*%.yml$") or
+       string.match(file_name, "%.yaml%.tpl$") or
+       string.match(file_name, "%.yml%.tpl$") then
+      vim.lsp.stop_client(client.id)
+      print("YAML LSP disabled for Helm template")
+    end
+  end,
+}

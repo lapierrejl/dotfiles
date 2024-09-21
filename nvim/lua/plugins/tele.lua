@@ -1,6 +1,6 @@
 -- require('telescope').load_extension('harpoon')
 require('telescope').load_extension('git_worktree')
-
+local fb_actions = require('telescope._extensions.file_browser.actions')
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
@@ -26,12 +26,17 @@ require('telescope').setup {
     file_browser = {
       theme = "ivy",
       hijack_netrw = true,
+      mappings = {
+        ["i"] = {
+          ["<C-p>"] = fb_actions.goto_parent_dir,
+        },
+      },
     },
   },
   pickers = {
     find_files = {
       theme = "ivy",
-    }
+    },
   },
 }
 
@@ -60,7 +65,7 @@ vim.keymap.set('n', '<leader>sm', ":Telescope harpoon marks<CR>", { desc = 'Harp
 vim.keymap.set("n", "<Leader>sr", "<CMD>lua require('telescope').extensions.git_worktree.git_worktrees()<CR>", silent)
 vim.keymap.set("n", "<Leader>sR", "<CMD>lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>", silent)
 vim.keymap.set("n", "<Leader>sn", "<CMD>lua require('telescope').extensions.notify.notify()<CR>", silent)
-vim.keymap.set("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
-vim.keymap.set("n", "<space>f", ":Telescope file_browser<CR>")
+vim.keymap.set("n", "<space>ff", ":NvimTreeFocus<CR>")
+vim.keymap.set("n", "<space>f", ":NvimTreeToggle<CR>")
 vim.api.nvim_set_keymap("n", "st", ":TodoTelescope<CR>", {noremap=true})
 vim.api.nvim_set_keymap("n", "<Leader><tab>", "<Cmd>lua require('telescope.builtin').commands()<CR>", {noremap=false})

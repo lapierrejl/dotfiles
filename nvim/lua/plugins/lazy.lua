@@ -328,5 +328,16 @@ require('lazy').setup({
         desc = "Buffer Local Keymaps (which-key)",
       },
     },
+  },
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup {}
+    end,
   }
 })
