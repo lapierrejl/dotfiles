@@ -1,0 +1,4 @@
+gh/hosts.yml
+github-copilot/hosts.json
+helm/registry/
+tmux/plugins/**

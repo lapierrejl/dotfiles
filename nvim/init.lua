@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -- If this is vscode don't load these
 if vim.g.vscode then
   return
@@ -18,3 +19,7 @@ require('plugins.zenmode')
 require('plugins.nvimtree')
 end
 -- vim: ts=8 sts=2 sw=2 et
+=======
+-- bootstrap lazy.nvim, LazyVim and your plugins
+require("config.lazy")
+>>>>>>> 39130aa (updating nvim)
