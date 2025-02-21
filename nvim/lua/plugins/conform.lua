@@ -14,8 +14,9 @@ return {
         lua = { "stylua" },
         fish = { "fish_indent" },
         sh = { "shfmt" },
-        python = { "black" },
+        python = { "ruff_format", "ruff_fix" },
         yaml = { "yamlfmt" },
+        terraform = { "terraform_fmt" },
         -- rust = { "rustfmt" },
       },
     }
