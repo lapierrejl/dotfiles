@@ -1,0 +1,8 @@
+theme = catppuccin-mocha
+quit-after-last-window-closed = true
+clipboard-read = allow
+clipboard-write = allow
+font-family = JetBrains Mono
+macos-option-as-alt = true
+link-url = true
+window-decoration = true
