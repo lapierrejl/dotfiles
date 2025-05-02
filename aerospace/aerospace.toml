@@ -1,5 +1,5 @@
 after-startup-command = [
-  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0',
 ]
 
 # Place a copy of this config to ~/.aerospace.toml
@@ -60,11 +60,11 @@ preset = 'qwerty'
 #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
 inner.horizontal = 0
-inner.vertical =   0
-outer.left =       0
-outer.bottom =     0
-outer.top =        0
-outer.right =      0
+inner.vertical = 0
+outer.left = 0
+outer.bottom = 0
+outer.top = 0
+outer.right = 0
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -165,7 +165,10 @@ alt-shift-enter = 'mode apps'
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
-f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+f = [
+  'layout floating tiling',
+  'mode main',
+] # Toggle between floating and tiling layout
 backspace = ['close-all-windows-but-current', 'mode main']
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
@@ -177,9 +180,14 @@ alt-shift-k = ['join-with up', 'mode main']
 alt-shift-l = ['join-with right', 'mode main']
 
 [mode.apps.binding]
-alt-w = ['exec-and-forget open -a /Applications/WezTerm.app', 'mode main']
+esc = ['reload-config', 'mode main']
+alt-t = ['exec-and-forget open -a /Applications/Ghostty.app', 'mode main']
 alt-s = ['exec-and-forget open -a /Applications/Slack.app', 'mode main']
-alt-c = ['exec-and-forget open -a /Applications/Google\ Chrome.app', 'mode main']
+alt-w = [
+  'exec-and-forget open -a /Applications/Google\ Chrome.app',
+  'mode main',
+]
+alt-d = ['exec-and-forget open -a /Applications/Docker.app', 'mode main']
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'zoom'
@@ -192,3 +200,25 @@ run = ['layout floating']
 [[on-window-detected]]
 if.app-id = "com.audible.iphone"
 run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = "com.tinyspeck.slackmacgap"
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = "com.google.Chrome"
+run = 'move-node-to-workspace 5'
+
+[[on-window-detected]]
+if.app-id = "com.mitchellh.ghostty"
+run = 'move-node-to-workspace 1'
+
+[workspace-to-monitor-force-assignment]
+1 = 'main'
+2 = 'main'
+3 = 'main'
+4 = 'main'
+5 = ['secondary', 'main']
+6 = ['secondary', 'main']
+7 = ['secondary', 'main']
+8 = ['secondary', 'main']
